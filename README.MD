@@ -1,326 +1,183 @@
-# 🌱 EcoEnergy - Sistema de Monitoreo Energético
+# 🌱⚡ EcoEnergy - Sistema de Monitoreo (Versión Evaluación)
 
-Sistema web de monitoreo energético desarrollado en Django para evaluación académica. Permite a las empresas gestionar dispositivos IoT, monitorear consumo energético y recibir alertas en tiempo real.
+Sistema de monitoreo IoT simplificado para dispositivos de energía renovable desarrollado con Django.
 
-## 📋 Características Principales
+## 📋 Descripción
 
-### ✅ Funcionalidades Implementadas
+Esta es una versión simplificada del sistema de monitoreo EcoEnergy, diseñada específicamente para demostración y evaluación académica. El sistema permite visualizar y gestionar dispositivos de monitoreo energético a través de una interfaz web intuitiva.
 
-#### 📊 **Dashboard Principal (HU1)**
+### ✨ Características Principales
 
-- Contadores por categoría y zona
-- Resumen de alertas por severidad
-- Últimas mediciones registradas
-- Interfaz con diseño Frutiger Aero (gradientes celeste-verde)
+- **Dashboard interactivo** con métricas de dispositivos
+- **Gestión de dispositivos IoT** (CRUD completo)
+- **Monitoreo de mediciones** en tiempo real
+- **Sistema de alertas** básico
+- **Autenticación simplificada** para demo
+- **Interfaz responsive** compatible con móviles
 
-#### 🔧 **Gestión de Dispositivos (HU2-HU3)**
+## 🎯 Versión Demo
 
-- Lista de dispositivos con filtro por categoría
-- Detalle completo de cada dispositivo
-- Visualización de mediciones y alertas asociadas
-- Estados de funcionamiento en tiempo real
+Esta versión está optimizada para evaluación y incluye:
 
-#### 📈 **Historial de Mediciones (HU4)**
+- ✅ **Acceso directo sin credenciales** - Solo haz clic en "Iniciar Sesión"
+- ✅ **Datos de ejemplo precargados** para demostración
+- ✅ **Funcionalidades visuales completas** sin complejidad backend
+- ✅ **Interfaz profesional** manteniendo el diseño original
 
-- Lista completa de mediciones históricas
-- Filtros por fecha y dispositivo
-- Valores de consumo energético detallados
+## 🚀 Instalación Rápida
 
-#### 🚨 **Sistema de Alertas (HU5)**
+### Prerrequisitos
 
-- Resumen de alertas por severidad
-- Alertas de la semana actual
-- Clasificación por niveles (Info, Warning, Critical)
+- Python 3.8+
+- pip
+- virtualenv (recomendado)
 
-#### 🔐 **Sistema de Autenticación (HU6-HU8)**
+### Pasos de instalación
 
-- Login de usuarios
-- Registro de empresas con verificación por email
-- Recuperación de contraseña con códigos de verificación
-- Protección de vistas con autenticación requerida
-
-## 🏗️ Arquitectura del Proyecto
-
-### 📁 Estructura de Directorios
-
-```
-monitoreo/
-├── db.sqlite3                      # Base de datos SQLite
-├── manage.py                       # Script de gestión Django
-├── monitoreo/                      # Configuración principal
-│   ├── settings.py                 # Configuraciones
-│   ├── urls.py                     # URLs principales
-│   └── wsgi.py                     # WSGI config
-├── dispositivos/                   # App principal - modelos de negocio
-│   ├── models.py                   # Organization, Device, Measurement, Alert
-│   ├── views.py                    # Vistas del dashboard y dispositivos
-│   ├── forms.py                    # Formularios
-│   ├── admin.py                    # Panel de administración
-│   └── templates/dispositivos/     # Templates principales
-│       ├── dashboard.html          # Dashboard principal
-│       ├── device_list.html        # Lista de dispositivos
-│       ├── device_detail.html      # Detalle de dispositivo
-│       ├── measurement_list.html   # Historial de mediciones
-│       └── alert_summary.html      # Resumen de alertas
-└── usuarios/                       # App de autenticación
-    ├── models.py                   # VerificationCode, UserProfile
-    ├── views.py                    # Login, registro, recuperación
-    └── templates/usuarios/         # Templates de auth
-        ├── login.html              # Inicio de sesión
-        ├── register.html           # Registro de empresas
-        ├── password_reset.html     # Solicitar recuperación
-        └── verify_code.html        # Verificar código email
-```
-
-### 🗄️ Modelos de Datos
-
-#### **dispositivos/models.py**
-
-- `Organization`: Empresas registradas
-- `Category`: Categorías de dispositivos (HVAC, Lighting, etc.)
-- `Zone`: Zonas físicas (Office, Warehouse, etc.)
-- `Device`: Dispositivos IoT de monitoreo
-- `Measurement`: Mediciones de consumo energético
-- `Alert`: Alertas del sistema
-- `PasswordResetToken`: Tokens para recuperación de contraseña
-
-#### **usuarios/models.py**
-
-- `VerificationCode`: Códigos de verificación por email
-- `UserProfile`: Perfiles extendidos de usuario
-
-## 🎨 Diseño Visual
-
-### **Estilo Frutiger Aero**
-
-- **Colores principales**: Gradientes celeste (#87CEEB) a verde (#98FB98)
-- **Efectos visuales**:
-  - Backdrop blur y transparencias
-  - Sombras suaves
-  - Transiciones fluidas
-  - Elementos flotantes animados
-- **Tipografía**: Segoe UI para legibilidad moderna
-- **Iconografía**: Emojis y símbolos relacionados con energía/ecología
-
-## 🔧 Configuración y Uso
-
-### **Prerrequisitos**
+1. **Clonar el repositorio**
 
 ```bash
-Python 3.8+
-Django 4.2+
+git clone https://github.com/mati-sly/ecoenergy-sistema-monitoreo-EVALUACION.git
+cd ecoenergy-sistema-monitoreo-EVALUACION
 ```
 
-### **Instalación**
+2. **Crear entorno virtual**
 
 ```bash
-# Clonar el proyecto
-git clone [repositorio]
+python -m venv .venv
+source .venv/bin/activate  # En Windows: .venv\Scripts\activate
+```
+
+3. **Instalar dependencias**
+
+```bash
+pip install -r requirements.txt
+```
+
+4. **Configurar variables de entorno**
+
+```bash
+# Copia el template y ajusta si es necesario
+cp .env.example .env
+```
+
+5. **Ejecutar migraciones**
+
+```bash
 cd monitoreo
-
-# Instalar dependencias
-pip install django
-
-# Aplicar migraciones
-python manage.py makemigrations
 python manage.py migrate
+```
 
-# Crear superusuario
-python manage.py createsuperuser
+6. **Iniciar servidor**
 
-# Ejecutar servidor
+```bash
 python manage.py runserver
 ```
 
-### **Configuración de Email**
+7. **Acceder al sistema**
 
-Para que funcione la verificación por email, configura en `settings.py`:
+- Abre tu navegador en `http://127.0.0.1:8000`
+- Haz clic en "Iniciar Sesión" para acceso directo
 
-```python
-# Email configuration para Gmail
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'tu-email@gmail.com'
-EMAIL_HOST_PASSWORD = 'tu-app-password'  # App password de Gmail
-DEFAULT_FROM_EMAIL = 'tu-email@gmail.com'
-```
-
-### **URLs Disponibles**
+## 📁 Estructura del Proyecto
 
 ```
-/                    → Dashboard principal
-/devices/            → Lista de dispositivos
-/devices/<id>/       → Detalle de dispositivo
-/measurements/       → Historial de mediciones
-/alerts/             → Resumen de alertas
-/login/              → Inicio de sesión
-/register/           → Registro de empresas
-/password-reset/     → Recuperación de contraseña
-/admin/              → Panel de administración
+ecoenergy-sistema-monitoreo-EVALUACION/
+├── monitoreo/                 # Proyecto Django principal
+│   ├── dispositivos/          # App principal de dispositivos
+│   │   ├── models.py         # Modelos de datos
+│   │   ├── views.py          # Lógica de vistas
+│   │   └── templates/        # Templates HTML
+│   ├── usuarios/             # App de autenticación
+│   │   ├── views.py          # Login simplificado
+│   │   └── templates/        # Templates de usuario
+│   └── monitoreo/            # Configuración Django
+├── requirements.txt          # Dependencias Python
+├── .env.example             # Template de configuración
+└── README.md               # Este archivo
 ```
 
-## 📊 Datos de Ejemplo
+## 🛠️ Tecnologías Utilizadas
 
-El sistema incluye datos precargados para testing:
+- **Backend:** Django 5.2, Python 3.11
+- **Base de datos:** SQLite (desarrollo)
+- **Frontend:** HTML5, CSS3, JavaScript vanilla
+- **Estilos:** CSS personalizado con gradientes y animaciones
+- **Icons:** Emojis y símbolos Unicode
 
-### **Organizaciones**
+## 🎨 Características de la Interfaz
 
-- Green Solutions Ltd.
-- EcoTech Industries
-- Sustainable Corp
+- **Diseño moderno** con gradientes ecológicos
+- **Efectos glassmorphism** y transparencias
+- **Animaciones suaves** en botones e interacciones
+- **Paleta de colores** inspirada en energía limpia
+- **Responsive design** para diferentes dispositivos
 
-### **Categorías de Dispositivos**
+## 📊 Funcionalidades Demo
 
-- HVAC (Climatización)
-- Lighting (Iluminación)
-- Appliances (Electrodomésticos)
-- Security (Seguridad)
+### Dashboard Principal
 
-### **Zonas**
+- Vista general de dispositivos activos
+- Métricas básicas de monitoreo
+- Gráficos de ejemplo
 
-- Office (Oficina)
-- Warehouse (Almacén)
-- Production (Producción)
-- Parking (Estacionamiento)
+### Gestión de Dispositivos
 
-### **Dispositivos Ejemplo**
+- Lista de dispositivos con filtros
+- Creación de nuevos dispositivos
+- Edición y eliminación (simulada)
 
-- Smart Thermostat (HVAC)
-- LED Panel Controller (Lighting)
-- Industrial Refrigerator (Appliances)
-- Security Camera System (Security)
+### Sistema de Monitoreo
 
-## 🐛 Problemas Conocidos y Soluciones
+- Visualización de mediciones
+- Historial de datos
+- Alertas básicas
 
-### **Problema: Error CSRF 403**
+## 🔧 Configuración de Desarrollo
 
-**Causa**: Falta el token CSRF en formularios
-**Solución**: Verificar que todos los templates tengan `{% csrf_token %}`
+Para desarrollo local, el sistema incluye:
 
-### **Problema: Código de verificación se reenvía**
+- **Debug activado** por defecto
+- **Base de datos SQLite** preconfigurada
+- **Datos de ejemplo** para testing
+- **Hot reload** para cambios en tiempo real
 
-**Causa**: JavaScript no envía correctamente el código de 6 dígitos
-**Solución**: Verificar que el campo oculto `hiddenCode` se actualice correctamente
+## 📝 Notas Importantes
 
-### **Problema: Usuario no se autentica**
+- Esta es una **versión simplificada** para evaluación
+- Las validaciones complejas están **deshabilitadas**
+- Los datos son **simulados** para demostración
+- No incluye funcionalidades de **producción real**
 
-**Causa**: Usuario creado como `is_active=False`
-**Solución**: Activar usuario después de verificar email
+## 🔐 Autenticación Demo
 
-## 🔄 Estado del Desarrollo
+El sistema incluye autenticación simplificada:
 
-### ✅ **Completado**
+- **Login directo** sin credenciales
+- **Usuario demo** creado automáticamente
+- **Sesiones persistentes** durante la demostración
 
-- [x] Modelos de datos con relaciones
-- [x] Dashboard con métricas
-- [x] CRUD de dispositivos
-- [x] Lista de mediciones
-- [x] Sistema de alertas
-- [x] Templates con diseño Frutiger Aero
-- [x] Panel de administración
-- [x] Datos de ejemplo
+## 🎯 Casos de Uso Demostrados
 
-### 🔄 **En Progreso**
+1. **HU1:** Dashboard principal con métricas
+2. **HU2:** Lista de dispositivos con filtros
+3. **HU3:** Detalle individual de dispositivos
+4. **HU4:** Gestión de mediciones
+5. **HU5:** Sistema de alertas básico
 
-- [ ] Sistema de autenticación (99% - debugging final)
-- [ ] Validación de códigos de verificación
-- [ ] Protección de vistas con `@login_required`
+## 📧 Contacto
 
-### 📋 **Por Implementar**
+Para consultas sobre este proyecto:
 
-- [ ] Tests unitarios
-- [ ] API REST endpoints
-- [ ] Gráficos interactivos de consumo
-- [ ] Notificaciones push
-- [ ] Exportación de reportes
-- [ ] Dashboard responsive móvil
-
-## 👥 Roles de Usuario
-
-### **Administrador**
-
-- Acceso completo al panel Django admin
-- Gestión de organizaciones y usuarios
-- Configuración del sistema
-
-### **Usuario Empresa**
-
-- Acceso a dashboard de su organización
-- Gestión de dispositivos propios
-- Visualización de mediciones y alertas
-- Generación de reportes
-
-## 📧 Configuración de Verificación por Email
-
-### **Para Gmail (Recomendado para desarrollo)**
-
-1. Activar verificación en 2 pasos en tu cuenta Google
-2. Generar "Contraseña de aplicación" específica
-3. Usar esa contraseña en `EMAIL_HOST_PASSWORD`
-4. Configurar `EMAIL_HOST_USER` con tu email de Gmail
-
-### **Para Producción**
-
-- Usar servicios como SendGrid, Mailgun o Amazon SES
-- Configurar dominio propio para emails
-- Implementar templates HTML para emails
-
-## 🚀 Historias de Usuario Implementadas
-
-- **HU1**: Dashboard con métricas principales ✅
-- **HU2**: Lista de dispositivos con filtros ✅
-- **HU3**: Detalle completo de dispositivos ✅
-- **HU4**: Historial de mediciones ✅
-- **HU5**: Resumen de alertas por severidad ✅
-- **HU6**: Login funcional ✅
-- **HU7**: Registro de empresas 🔄
-- **HU8**: Recuperación de contraseña 🔄
-
-## 📝 Notas de Desarrollo
-
-### **Consideraciones Técnicas**
-
-- Base de datos SQLite para desarrollo (cambiar a PostgreSQL en producción)
-- Campos `created_at`, `updated_at`, `deleted_at` en todos los modelos
-- Soft deletes implementados donde corresponde
-- Relaciones FK correctas entre modelos
-
-### **Estilo y UX**
-
-- Diseño Frutiger Aero consistente en todas las páginas
-- Responsive design con breakpoints móviles
-- Animaciones CSS para mejor experiencia
-- Feedback visual para todas las acciones del usuario
-
-### **Seguridad**
-
-- Protección CSRF en todos los formularios
-- Validación de entrada en backend
-- Expiración de códigos de verificación (10 minutos)
-- Contraseñas hasheadas con Django auth
-
-## 🤝 Contribución
-
-Este es un proyecto académico para evaluación. Para modificaciones:
-
-1. Fork del repositorio
-2. Crear rama feature (`git checkout -b feature/nueva-funcionalidad`)
-3. Commit cambios (`git commit -am 'Agregar nueva funcionalidad'`)
-4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
-5. Crear Pull Request
-
-## 📄 Licencia
-
-Proyecto académico - Solo para fines educativos
-
-## 👨‍💻 Autor
-
-Desarrollado como parte de evaluación académica para el curso de Backend
+- **Desarrolladores:** Matias y Alma
+- **Repositorio:** [GitHub](https://github.com/mati-sly/ecoenergy-sistema-monitoreo-EVALUACION)
 
 ---
 
-**Última actualización**: Septiembre 2025  
-**Versión**: 1.0.0-beta  
-**Estado**: En desarrollo activo
+## 📜 Licencia
+
+Este proyecto es una demostración académica desarrollada para fines educativos.
+
+---
+
+_Desarrollado con 💚 para un futuro energético sostenible_

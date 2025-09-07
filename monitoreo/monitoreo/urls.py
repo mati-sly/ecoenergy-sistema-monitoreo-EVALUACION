@@ -14,9 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-"""
-URL configuration for monitoreo project.
-"""
+
 from django.contrib import admin
 from django.urls import path
 from dispositivos.views import (
@@ -27,22 +25,22 @@ from dispositivos.views import (
     # Vistas originales para compatibilidad
     inicio, dispositivo, panel_dispositivos
 )
-# Actualizar importaciones para incluir las nuevas vistas de códigos
-from usuarios.views import login_view, register_view, password_reset_view, logout_view, verify_code_view, resend_code_view, reset_password_confirm
+
+# Importaciones simplificadas para versión demo
+from usuarios.views import login_view, register_view, password_reset_view, logout_view, verify_code_view, reset_password_confirm
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     
-    # RUTAS DE AUTENTICACIÓN CON SISTEMA DE CÓDIGOS:
+    # RUTAS DE AUTENTICACIÓN SIMPLIFICADAS:
     path('login/', login_view, name='login'),
     path('register/', register_view, name='register'),
     path('password-reset/', password_reset_view, name='password_reset'),
     path('verify-code/', verify_code_view, name='verify_code'),
-    path('resend-code/', resend_code_view, name='resend_code'),
     path('logout/', logout_view, name='logout'),
     
-    # Ruta obsoleta mantenida para compatibilidad
-    path('reset-password/<uuid:token>/', reset_password_confirm, name='reset_password_confirm'),
+    # Ruta obsoleta comentada - función no disponible en versión demo
+    # path('reset-password/<uuid:token>/', reset_password_confirm, name='reset_password_confirm'),
     
     # Rutas principales para la evaluación
     path('', dashboard, name='dashboard'),  # HU1 - Dashboard

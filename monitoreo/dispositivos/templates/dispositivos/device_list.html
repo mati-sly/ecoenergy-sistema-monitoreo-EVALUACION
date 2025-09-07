@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <title>Lista de Dispositivos - EcoEnergy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #87CEEB 0%, #E0F6FF 50%, #98FB98 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(135, 206, 235, 0.3);
+        }
+        
+        h1 {
+            color: #2F5F8F;
+            font-size: 2.2em;
+            font-weight: 300;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .filter-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 15px;
+        }
+        
+        .filter-form {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .filter-form select,
+        .filter-form button {
+            padding: 10px 15px;
+            border: 2px solid #B0E0E6;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+        
+        .filter-form button {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-form button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .devices-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .devices-table thead {
+            background: linear-gradient(135deg, #2F5F8F, #1e3d5f);
+        }
+        
+        .devices-table th {
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 500;
+        }
+        
+        .devices-table th:first-child { border-top-left-radius: 10px; }
+        .devices-table th:last-child { border-top-right-radius: 10px; }
+        
+        .devices-table tbody tr {
+            border-bottom: 1px solid rgba(135, 206, 235, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .devices-table tbody tr:hover {
+            background: rgba(135, 206, 235, 0.1);
+        }
+        
+        .devices-table td {
+            padding: 15px;
+            color: #333;
+        }
+        
+        .device-name {
+            font-weight: 600;
+            color: #2F5F8F;
+        }
+        
+        .detail-link {
+            background: linear-gradient(135deg, #87CEEB, #5F9EA0);
+            color: white;
+            padding: 6px 12px;
+            text-decoration: none;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .detail-link:hover {
+            transform: translateY(-1px);
+            text-decoration: none;
+            color: white;
+        }
+        
+        .back-link {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .btn-back {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-back:hover {
+            transform: translateY(-2px);
+            text-decoration: none;
+            color: white;
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Lista de Dispositivos</h1>
+            <p>Explora el inventario de dispositivos por categoría</p>
+        </div>
+        
+        <!-- Filtro por categoría -->
+        <div class="filter-section">
+            <form method="GET" class="filter-form">
+                <label for="category">Filtrar por categoría:</label>
+                <select name="category" id="category">
+                    <option value="">Todas las categorías</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" 
+                                {% if selected_category == category.id|stringformat:"s" %}selected{% endif %}>
+                            {{ category.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Filtrar</button>
+                {% if selected_category %}
+                    <a href="{% url 'device_list' %}" style="text-decoration: none; color: #666;">Limpiar filtro</a>
+                {% endif %}
+            </form>
+        </div>
+        
+        <!-- Tabla de dispositivos -->
+        {% if devices %}
+            <table class="devices-table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Categoría</th>
+                        <th>Zona</th>
+                        <th>Estado</th>
+                        <th>Potencia</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for device in devices %}
+                    <tr>
+                        <td class="device-name">{{ device.name }}</td>
+                        <td>{{ device.category.name }}</td>
+                        <td>{{ device.zone.name }}</td>
+                        <td>{{ device.get_status_display }}</td>
+                        <td>{{ device.power_watts }} W</td>
+                        <td>
+                            <a href="{% url 'device_detail' device.id %}" class="detail-link">
+                                Ver detalle
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="empty-state">
+                {% if selected_category %}
+                    No hay dispositivos en la categoría seleccionada.
+                {% else %}
+                    No hay dispositivos disponibles.
+                {% endif %}
+            </div>
+        {% endif %}
+        
+        <div class="back-link">
+            <a href="{% url 'dashboard' %}" class="btn-back">Volver al Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>

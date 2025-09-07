@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>Verificar Código - EcoEnergy</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.10.1/sweetalert2.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.10.1/sweetalert2.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(
+          135deg,
+          #87ceeb 0%,
+          #e0f6ff 50%,
+          #98fb98 100%
+        );
+        min-height: 100vh;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .verify-container {
+        max-width: 450px;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        padding: 40px 30px;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .logo {
+        font-size: 3em;
+        margin-bottom: 10px;
+      }
+
+      h1 {
+        color: #2f5f8f;
+        font-size: 1.8em;
+        font-weight: 300;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 10px;
+      }
+
+      .subtitle {
+        color: #666;
+        font-size: 0.95em;
+        margin-bottom: 20px;
+        line-height: 1.4;
+      }
+
+      .timer-container {
+        text-align: center;
+        margin: 20px 0;
+        padding: 15px;
+        background: rgba(135, 206, 235, 0.1);
+        border-radius: 10px;
+        border: 2px solid rgba(135, 206, 235, 0.3);
+      }
+
+      .timer {
+        font-size: 2em;
+        font-weight: bold;
+        color: #4caf50;
+        margin-bottom: 5px;
+      }
+
+      .timer.warning {
+        color: #ff9800;
+      }
+
+      .timer.danger {
+        color: #f44336;
+      }
+
+      .timer-text {
+        color: #666;
+        font-size: 0.9em;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        color: #2f5f8f;
+        font-weight: 500;
+        margin-bottom: 8px;
+      }
+
+      .code-inputs {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin: 20px 0;
+      }
+
+      .code-digit {
+        width: 50px;
+        height: 60px;
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        border: 2px solid #b0e0e6;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.8);
+        transition: all 0.3s ease;
+        outline: none;
+      }
+
+      .code-digit:focus {
+        border-color: #4caf50;
+        box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        background: rgba(255, 255, 255, 0.95);
+      }
+
+      input[type="password"] {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #b0e0e6;
+        border-radius: 12px;
+        font-size: 16px;
+        background: rgba(255, 255, 255, 0.8);
+        transition: all 0.3s ease;
+        outline: none;
+      }
+
+      input[type="password"]:focus {
+        border-color: #4caf50;
+        box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        background: rgba(255, 255, 255, 0.95);
+      }
+
+      .btn {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, #4caf50, #45a049);
+        color: white;
+        border: none;
+        border-radius: 25px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        margin-bottom: 15px;
+      }
+
+      .btn:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+      }
+
+      .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .btn-secondary {
+        background: linear-gradient(135deg, #87ceeb, #5f9ea0);
+        box-shadow: 0 4px 15px rgba(135, 206, 235, 0.3);
+      }
+
+      .btn-secondary:hover:not(:disabled) {
+        box-shadow: 0 6px 20px rgba(135, 206, 235, 0.4);
+      }
+
+      .links {
+        text-align: center;
+      }
+
+      .links a {
+        color: #2f5f8f;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+        display: block;
+        margin: 10px 0;
+      }
+
+      .links a:hover {
+        color: #4caf50;
+        text-decoration: underline;
+      }
+
+      .alert {
+        padding: 10px 15px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        font-size: 14px;
+      }
+
+      .alert-error {
+        background: rgba(244, 67, 54, 0.1);
+        border: 1px solid rgba(244, 67, 54, 0.3);
+        color: #d32f2f;
+      }
+
+      .alert-success {
+        background: rgba(76, 175, 80, 0.1);
+        border: 1px solid rgba(76, 175, 80, 0.3);
+        color: #388e3c;
+      }
+
+      .step {
+        display: none;
+      }
+
+      .step.active {
+        display: block;
+      }
+
+      .progress-bar {
+        height: 4px;
+        background: rgba(135, 206, 235, 0.3);
+        border-radius: 2px;
+        margin-bottom: 20px;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(135deg, #4caf50, #45a049);
+        border-radius: 2px;
+        transition: width 0.3s ease;
+      }
+
+      @media (max-width: 480px) {
+        .verify-container {
+          margin: 20px;
+          padding: 30px 20px;
+        }
+
+        .code-digit {
+          width: 45px;
+          height: 55px;
+          font-size: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="verify-container">
+      <div class="header">
+        <div class="logo">🔑</div>
+        <h1>Verificar Código</h1>
+        <p class="subtitle">
+          Hemos enviado un código de 6 dígitos a <strong>{{ email }}</strong>
+        </p>
+      </div>
+
+      <div class="progress-bar">
+        <div
+          class="progress-fill"
+          id="progressFill"
+          style="width: {% if code_verified %}100{% else %}50{% endif %}%;"
+        ></div>
+      </div>
+
+      <!-- Mensajes de error/éxito -->
+      {% if messages %} {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %} {% endif %}
+
+      <!-- Paso 1: Verificar código -->
+      <div class="step {% if not code_verified %}active{% endif %}" id="step1">
+        <div class="timer-container">
+          <div class="timer" id="timer">10:00</div>
+          <div class="timer-text">Tiempo restante</div>
+        </div>
+
+        <form method="post" id="codeForm">
+          {% csrf_token %}
+          <input type="hidden" name="email" value="{{ email }}" />
+
+          <label>Ingresa el código de 6 dígitos:</label>
+          <div class="code-inputs">
+            <input
+              type="text"
+              class="code-digit"
+              maxlength="1"
+              data-index="0"
+            />
+            <input
+              type="text"
+              class="code-digit"
+              maxlength="1"
+              data-index="1"
+            />
+            <input
+              type="text"
+              class="code-digit"
+              maxlength="1"
+              data-index="2"
+            />
+            <input
+              type="text"
+              class="code-digit"
+              maxlength="1"
+              data-index="3"
+            />
+            <input
+              type="text"
+              class="code-digit"
+              maxlength="1"
+              data-index="4"
+            />
+            <input
+              type="text"
+              class="code-digit"
+              maxlength="1"
+              data-index="5"
+            />
+          </div>
+
+          <input type="hidden" name="code" id="hiddenCode" />
+          <button type="submit" class="btn" id="verifyBtn">
+            Verificar Código
+          </button>
+        </form>
+
+        <form
+          method="post"
+          action="{% url 'resend_code' %}"
+          style="margin-top: 10px"
+        >
+          {% csrf_token %}
+          <input type="hidden" name="email" value="{{ email }}" />
+          <button type="submit" class="btn btn-secondary" id="resendBtn">
+            Reenviar Código
+          </button>
+        </form>
+      </div>
+
+      <!-- Paso 2: Nueva contraseña -->
+      <div class="step {% if code_verified %}active{% endif %}" id="step2">
+        <h2 style="color: #4caf50; text-align: center; margin-bottom: 20px">
+          ✓ Código Verificado
+        </h2>
+
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="email" value="{{ email }}" />
+          <input type="hidden" name="code" value="{{ code }}" />
+
+          <div class="form-group">
+            <label for="password">Nueva contraseña:</label>
+            <input type="password" id="password" name="password" required />
+          </div>
+
+          <div class="form-group">
+            <label for="password_confirm">Confirmar contraseña:</label>
+            <input
+              type="password"
+              id="password_confirm"
+              name="password_confirm"
+              required
+            />
+          </div>
+
+          <button type="submit" class="btn">Cambiar Contraseña</button>
+        </form>
+      </div>
+
+      <div class="links">
+        <a href="{% url 'login' %}">Volver al inicio de sesión</a>
+      </div>
+    </div>
+
+    <script>
+      // Timer countdown
+      let timeLeft = 600; // 10 minutos en segundos
+      const timerElement = document.getElementById('timer');
+
+      function updateTimer() {
+          const minutes = Math.floor(timeLeft / 60);
+          const seconds = timeLeft % 60;
+
+          timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+          // Cambiar color según tiempo restante
+          if (timeLeft <= 60) {
+              timerElement.className = 'timer danger';
+          } else if (timeLeft <= 300) {
+              timerElement.className = 'timer warning';
+          } else {
+              timerElement.className = 'timer';
+          }
+
+          if (timeLeft <= 0) {
+              Swal.fire({
+                  title: 'Código Expirado',
+                  text: 'El código ha expirado. Solicita uno nuevo.',
+                  icon: 'warning',
+                  confirmButtonText: 'Solicitar Nuevo Código',
+                  confirmButtonColor: '#4CAF50'
+              }).then(() => {
+                  document.getElementById('resendBtn').click();
+              });
+              return;
+          }
+
+          timeLeft--;
+      }
+
+      // Iniciar timer si estamos en step1
+      if (document.getElementById('step1').classList.contains('active')) {
+          setInterval(updateTimer, 1000);
+      }
+
+      // Manejo de inputs de código
+      const codeInputs = document.querySelectorAll('.code-digit');
+      const hiddenCode = document.getElementById('hiddenCode');
+
+      codeInputs.forEach((input, index) => {
+          input.addEventListener('input', (e) => {
+              const value = e.target.value;
+
+              // Solo números
+              if (!/^\d*$/.test(value)) {
+                  e.target.value = '';
+                  return;
+              }
+
+              // Auto-avanzar al siguiente input
+              if (value && index < codeInputs.length - 1) {
+                  codeInputs[index + 1].focus();
+              }
+
+              // Actualizar código oculto
+              updateHiddenCode();
+          });
+
+          input.addEventListener('keydown', (e) => {
+              // Backspace: ir al input anterior
+              if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                  codeInputs[index - 1].focus();
+              }
+          });
+
+          input.addEventListener('paste', (e) => {
+              e.preventDefault();
+              const paste = e.clipboardData.getData('text');
+              const digits = paste.replace(/\D/g, '').slice(0, 6);
+
+              digits.split('').forEach((digit, i) => {
+                  if (codeInputs[i]) {
+                      codeInputs[i].value = digit;
+                  }
+              });
+
+              updateHiddenCode();
+          });
+      });
+
+      function updateHiddenCode() {
+          const code = Array.from(codeInputs).map(input => input.value).join('');
+          hiddenCode.value = code;
+      }
+
+      // Validación del formulario de código
+      document.getElementById('codeForm').addEventListener('submit', (e) => {
+          const code = hiddenCode.value;
+          if (code.length !== 6) {
+              e.preventDefault();
+              Swal.fire({
+                  title: 'Código Incompleto',
+                  text: 'Por favor ingresa los 6 dígitos del código.',
+                  icon: 'warning',
+                  confirmButtonColor: '#4CAF50'
+              });
+          }
+      });
+
+      // Mostrar mensaje de éxito al reenviar código
+      {% if messages %}
+          {% for message in messages %}
+              {% if 'nuevo código' in message %}
+              Swal.fire({
+                  title: 'Código Reenviado',
+                  text: '{{ message }}',
+                  icon: 'success',
+                  confirmButtonColor: '#4CAF50'
+              });
+              {% endif %}
+          {% endfor %}
+      {% endif %}
+    </script>
+  </body>
+</html>

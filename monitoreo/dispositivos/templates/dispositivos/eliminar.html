@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>Eliminar {{ dispositivo.nombre }} - EcoEnergy</title>
+  </head>
+  <body>
+    <h1>Eliminar Dispositivo</h1>
+
+    <p>¿Estás seguro que deseas eliminar este dispositivo?</p>
+
+    <div>
+      <h3>{{ dispositivo.nombre }}</h3>
+      <p><strong>Modelo:</strong> {{ dispositivo.modelo }}</p>
+      <p><strong>Categoría:</strong> {{ dispositivo.categoria }}</p>
+      <p><strong>Zona:</strong> {{ dispositivo.zona }}</p>
+    </div>
+
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit">Sí, eliminar</button>
+      <a href="{% url 'dispositivo' dispositivo.id %}">Cancelar</a>
+    </form>
+  </body>
+</html>

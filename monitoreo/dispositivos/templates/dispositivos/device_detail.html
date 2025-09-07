@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>{{ device.name }} - EcoEnergy</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(
+          135deg,
+          #87ceeb 0%,
+          #e0f6ff 50%,
+          #98fb98 100%
+        );
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 40px auto;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid rgba(135, 206, 235, 0.3);
+      }
+
+      h1 {
+        color: #2f5f8f;
+        margin-bottom: 15px;
+        font-weight: 300;
+        font-size: 2.2em;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      h2 {
+        color: #4caf50;
+        font-size: 1.8em;
+        font-weight: 500;
+        margin-bottom: 10px;
+      }
+
+      .content-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin-bottom: 30px;
+      }
+
+      .device-info {
+        grid-column: span 2;
+      }
+
+      .info-card {
+        background: rgba(255, 255, 255, 0.7);
+        padding: 20px;
+        border-radius: 15px;
+        border: 2px solid rgba(135, 206, 235, 0.2);
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+      }
+
+      .info-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        border-color: rgba(76, 175, 80, 0.3);
+      }
+
+      .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(135, 206, 235, 0.2);
+      }
+
+      .info-row:last-child {
+        border-bottom: none;
+      }
+
+      .info-label {
+        font-weight: 600;
+        color: #2f5f8f;
+        font-size: 1.1em;
+      }
+
+      .info-value {
+        color: #333;
+        font-size: 1.1em;
+        text-align: right;
+      }
+
+      .power-value {
+        color: #4caf50;
+        font-weight: 700;
+      }
+
+      .status-active {
+        background: linear-gradient(135deg, #4caf50, #45a049);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 15px;
+        font-size: 0.9em;
+        font-weight: 500;
+      }
+
+      .status-inactive {
+        background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 15px;
+        font-size: 0.9em;
+        font-weight: 500;
+      }
+
+      .section-title {
+        color: #2f5f8f;
+        font-size: 1.3em;
+        margin-bottom: 15px;
+        font-weight: 500;
+      }
+
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+      }
+
+      .data-table thead {
+        background: linear-gradient(135deg, #2f5f8f, #1e3d5f);
+      }
+
+      .data-table th {
+        color: white;
+        padding: 10px;
+        text-align: left;
+        font-weight: 500;
+        font-size: 0.9em;
+      }
+
+      .data-table tbody tr {
+        border-bottom: 1px solid rgba(135, 206, 235, 0.2);
+        transition: all 0.3s ease;
+      }
+
+      .data-table tbody tr:hover {
+        background: rgba(135, 206, 235, 0.1);
+      }
+
+      .data-table td {
+        padding: 10px;
+        color: #333;
+        font-size: 0.9em;
+      }
+
+      .actions {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 30px;
+      }
+
+      .btn {
+        padding: 12px 24px;
+        text-decoration: none;
+        border-radius: 25px;
+        font-size: 16px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: inline-block;
+        text-align: center;
+        min-width: 120px;
+      }
+
+      .btn-edit {
+        background: linear-gradient(135deg, #87ceeb, #5f9ea0);
+        color: white;
+        box-shadow: 0 4px 15px rgba(135, 206, 235, 0.3);
+      }
+
+      .btn-edit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(135, 206, 235, 0.4);
+        text-decoration: none;
+        color: white;
+      }
+
+      .btn-delete {
+        background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+        color: white;
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+      }
+
+      .btn-delete:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+        text-decoration: none;
+        color: white;
+      }
+
+      .btn-back {
+        background: linear-gradient(135deg, #4caf50, #45a049);
+        color: white;
+        box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+      }
+
+      .btn-back:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+        text-decoration: none;
+        color: white;
+      }
+
+      .device-icon {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+      }
+
+      .empty-state {
+        text-align: center;
+        color: #666;
+        font-style: italic;
+        padding: 20px;
+      }
+
+      @media (max-width: 768px) {
+        .content-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .device-info {
+          grid-column: span 1;
+        }
+
+        .actions {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .btn {
+          width: 200px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="device-icon">🔌</div>
+        <h1>Detalle del Dispositivo</h1>
+        <h2>{{ device.name }}</h2>
+      </div>
+
+      <!-- Información básica del dispositivo -->
+      <div class="device-info">
+        <div class="info-card">
+          <div class="info-row">
+            <span class="info-label">Modelo:</span>
+            <span class="info-value">{{ device.model }}</span>
+          </div>
+
+          <div class="info-row">
+            <span class="info-label">Categoría:</span>
+            <span class="info-value">{{ device.category.name }}</span>
+          </div>
+
+          <div class="info-row">
+            <span class="info-label">Zona:</span>
+            <span class="info-value">{{ device.zone.name }}</span>
+          </div>
+
+          <div class="info-row">
+            <span class="info-label">Estado:</span>
+            <span class="info-value">
+              {% if device.status == 'active' %}
+              <span class="status-active">{{ device.get_status_display }}</span>
+              {% else %}
+              <span class="status-inactive"
+                >{{ device.get_status_display }}</span
+              >
+              {% endif %}
+            </span>
+          </div>
+
+          <div class="info-row">
+            <span class="info-label">Potencia:</span>
+            <span class="info-value power-value"
+              >{{ device.power_watts }} W</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Grid para Mediciones y Alertas -->
+      <div class="content-grid">
+        <!-- Mediciones del dispositivo -->
+        <div class="info-card">
+          <h3 class="section-title">Mediciones Recientes</h3>
+          {% if measurements %}
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Consumo</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for measurement in measurements %}
+              <tr>
+                <td>{{ measurement.timestamp|date:"d/m H:i" }}</td>
+                <td>{{ measurement.consumption_kwh }} kWh</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+          <div class="empty-state">No hay mediciones disponibles</div>
+          {% endif %}
+        </div>
+
+        <!-- Alertas del dispositivo -->
+        <div class="info-card">
+          <h3 class="section-title">Alertas del Dispositivo</h3>
+          {% if alerts %}
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Tipo</th>
+                <th>Severidad</th>
+                <th>Fecha</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for alert in alerts %}
+              <tr>
+                <td>{{ alert.get_alert_type_display }}</td>
+                <td>{{ alert.severity }}</td>
+                <td>{{ alert.alert_date|date:"d/m H:i" }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+          <div class="empty-state">No hay alertas para este dispositivo</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Acciones -->
+      <div class="actions">
+        <a href="{% url 'editar_dispositivo' device.id %}" class="btn btn-edit"
+          >Editar</a
+        >
+        <a
+          href="{% url 'eliminar_dispositivo' device.id %}"
+          class="btn btn-delete"
+          >Eliminar</a
+        >
+        <a href="{% url 'device_list' %}" class="btn btn-back"
+          >Volver a Lista</a
+        >
+        <a href="{% url 'dashboard' %}" class="btn btn-back">Dashboard</a>
+      </div>
+    </div>
+  </body>
+</html>

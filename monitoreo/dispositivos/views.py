@@ -41,7 +41,7 @@ def dashboard(request):
         # Alertas de la semana por severidad
         week_ago = timezone.now() - timedelta(days=7)
         alerts_by_severity = {}
-        severities = ['Grave', 'Alto', 'Mediano']
+        severities = ['grave', 'alta', 'media']
         for severity in severities:
             count = Alert.objects.filter(
                 organization=organization,
@@ -120,7 +120,7 @@ def alert_summary(request):
     
     # Alertas de la semana por severidad
     alerts_by_severity = {}
-    severities = ['Grave', 'Alto', 'Mediano']
+    severities = ['grave', 'alta', 'media']
     for severity in severities:
         alerts = Alert.objects.filter(
             organization=organization,

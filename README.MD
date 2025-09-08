@@ -327,7 +327,7 @@ python manage.py seed_data
 
 - **Desarrolladores:** Matias y Alma
 - **Repositorio:** [GitHub](https://github.com/mati-sly/ecoenergy-sistema-monitoreo-EVALUACION)
-- **Institución:** Instituto Profesional AIEP - La Serena
+- **Institución:** Instituto Profesional INACAP - La Serena
 
 ---
 

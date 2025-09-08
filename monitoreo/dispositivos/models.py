@@ -16,7 +16,7 @@ class Organization(models.Model):
 
 class Category(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='categories')
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -27,10 +27,12 @@ class Category(models.Model):
     
     class Meta:
         verbose_name_plural = "Categories"
+        unique_together = ['name', 'organization']
+
 
 class Zone(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='zones')
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     location = models.CharField(max_length=200)
     max_capacity = models.DecimalField(max_digits=10, decimal_places=2, help_text="Maximum capacity in kW")
@@ -40,6 +42,9 @@ class Zone(models.Model):
     
     def __str__(self):
         return f"{self.name} - {self.location}"
+    
+    class Meta:
+        unique_together = ['name', 'organization']
 
 class Device(models.Model):
     STATUS_CHOICES = [
@@ -90,10 +95,11 @@ class Alert(models.Model):
     ]
     
     SEVERITY_CHOICES = [
-        ('Mediano', 'Mediano'),
-        ('Alto', 'Alto'), 
-        ('Grave', 'Grave'),
+    ('grave', 'Grave'),     # Cambiar 'Grave' por 'grave'
+    ('alta', 'Alta'),       # Cambiar 'Alto' por 'alta'  
+    ('media', 'Media'),     # Cambiar 'Mediano' por 'media'
     ]
+    
     
     STATUS_CHOICES = [
         ('active', 'Active'),
